@@ -74,17 +74,35 @@ namespace ProjectPlaneCurves.ViewModels
 
         private bool CanCloseWindowCommandExecute(object parameter)
         {
+            SaveSettings();
             return true;
         }
         #endregion
 
         #endregion
 
+        private void SaveSettings()
+        {
+            Properties.Settings.Default["PlaneCurvesElemIds"] = PlaneCurvesElemIds;
+            Properties.Settings.Default.Save();
+        }
 
         #region Конструктор класса MainWindowViewModel
         public MainWindowViewModel(RevitModelForfard revitModel)
         {
             RevitModel = revitModel;
+
+            #region Инициализация значения элементам линий на плане
+            if (!(Properties.Settings.Default["PlaneCurvesElemIds"] is null))
+            {
+                string planeCurvesElementIdInSettings = Properties.Settings.Default["PlaneCurvesElemIds"].ToString();
+                if(RevitModel.IsPlaneCurvesExistInModel(planeCurvesElementIdInSettings) && !string.IsNullOrEmpty(planeCurvesElementIdInSettings))
+                {
+                    PlaneCurvesElemIds = planeCurvesElementIdInSettings;
+                    RevitModel.GetPlaneLinesBySettings(planeCurvesElementIdInSettings);
+                }
+            }
+            #endregion
 
             #region Команды
             GetPlaneCurvesCommand = new LambdaCommand(OnGetPlaneCurvesCommandExecuted, CanGetPlaneCurvesCommandExecute);
@@ -94,6 +112,7 @@ namespace ProjectPlaneCurves.ViewModels
 
         public MainWindowViewModel()
         { }
+
         #endregion
     }
 }

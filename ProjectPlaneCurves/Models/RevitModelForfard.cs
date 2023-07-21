@@ -44,7 +44,24 @@ namespace ProjectPlaneCurves
             var curves = RevitGeometryUtils.GetModelCurvesBySelection(Uiapp, out _planeCurvesElemIds);
             PlaneCurves = new PolyCurve(curves);
         }
+        #endregion
 
+        #region Проверка на то существуют линии на плане в модели
+        public bool IsPlaneCurvesExistInModel(string elemIdsInSettings)
+        {
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+
+            return RevitGeometryUtils.IsPlaneCurvesExistInModel(Doc, elemIds);
+        }
+        #endregion
+
+        #region Получение линий на плане из Settings
+        public void GetPlaneLinesBySettings(string elemIdsInSettings)
+        {
+            var elemIds = RevitGeometryUtils.GetIdsByString(elemIdsInSettings);
+            var curves = RevitGeometryUtils.GetModelCurvesBySettings(Doc, elemIds);
+            PlaneCurves = new PolyCurve(curves);
+        }
         #endregion
 
 
