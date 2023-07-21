@@ -74,9 +74,10 @@
                 <UniformGrid Rows="2">
                     <TextBlock Text="Линии в плане"
                                Style="{StaticResource TextAboveButton}" />
-                    <Button Style="{StaticResource SelectButton}" />
+                    <Button Style="{StaticResource SelectButton}" 
+                            Command="{Binding GetPlaneCurvesCommand}"/>
                 </UniformGrid>
-                <TextBox Text=""
+                <TextBox Text="{Binding PlaneCurvesElemIds}"
                          Style="{StaticResource SelectedItemsBox}" />
             </UniformGrid>
         </GroupBox>

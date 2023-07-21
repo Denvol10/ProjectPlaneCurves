@@ -26,7 +26,6 @@ namespace ProjectPlaneCurves.ViewModels
         }
 
         #region Заголовок
-
         private string _title = "Проецировать линии";
 
         public string Title
@@ -34,17 +33,35 @@ namespace ProjectPlaneCurves.ViewModels
             get => _title;
             set => Set(ref _title, value);
         }
-
         #endregion
 
+        #region Линии для проецирования в плане
+        private string _planeCurvesElemIds;
 
+        public string PlaneCurvesElemIds
+        {
+            get => _planeCurvesElemIds;
+            set => Set(ref _planeCurvesElemIds, value);
+        }
+        #endregion
 
         #region Команды
 
-        #region Команда получение всех комнат
+        #region Получение линий для проецирования
+        public ICommand GetPlaneCurvesCommand { get; }
 
+        private void OnGetPlaneCurvesCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            RevitModel.GetPlaneCurvesBySelection();
+            PlaneCurvesElemIds = RevitModel.PlaneCurvesElemIds;
+            RevitCommand.mainView.ShowDialog();
+        }
 
-
+        private bool CanGetPlaneCurvesCommandExecute(object parameter)
+        {
+            return true;
+        }
         #endregion
 
         #endregion
@@ -56,8 +73,7 @@ namespace ProjectPlaneCurves.ViewModels
             RevitModel = revitModel;
 
             #region Команды
-
-
+            GetPlaneCurvesCommand = new LambdaCommand(OnGetPlaneCurvesCommandExecuted, CanGetPlaneCurvesCommandExecute);
             #endregion
         }
 

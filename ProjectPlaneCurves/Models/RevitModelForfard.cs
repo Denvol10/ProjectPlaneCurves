@@ -10,32 +10,43 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
+using ProjectPlaneCurves.Models;
 
 namespace ProjectPlaneCurves
 {
     public class RevitModelForfard
     {
-        private UIApplication _uiapp = null;
-        private Application _app = null;
-        private UIDocument _uidoc = null;
-        private Document _doc = null;
+        private UIApplication Uiapp { get; set; } = null;
+        private Application App { get; set; } = null;
+        private UIDocument Uidoc { get; set; } = null;
+        private Document Doc { get; set; } = null;
 
         public RevitModelForfard(UIApplication uiapp)
         {
-            _uiapp = uiapp;
-            _app = uiapp.Application;
-            _uidoc = uiapp.ActiveUIDocument;
-            _doc = uiapp.ActiveUIDocument.Document;
+            Uiapp = uiapp;
+            App = uiapp.Application;
+            Uidoc = uiapp.ActiveUIDocument;
+            Doc = uiapp.ActiveUIDocument.Document;
         }
 
-        public List<string> GetAllRooms()
+        #region Линии для проецирования в плане
+        public PolyCurve PlaneCurves { get; set; }
+
+        private string _planeCurvesElemIds;
+        public string PlaneCurvesElemIds
         {
-            var rooms = new FilteredElementCollector(_doc).OfCategory(BuiltInCategory.OST_Rooms)
-                                                          .Cast<Room>()
-                                                          .Select(r => r.Name)
-                                                          .ToList();
-
-            return rooms;
+            get => _planeCurvesElemIds;
+            set => _planeCurvesElemIds = value;
         }
+
+        public void GetPlaneCurvesBySelection()
+        {
+            var curves = RevitGeometryUtils.GetModelCurvesBySelection(Uiapp, out _planeCurvesElemIds);
+            PlaneCurves = new PolyCurve(curves);
+        }
+
+        #endregion
+
+
     }
 }
