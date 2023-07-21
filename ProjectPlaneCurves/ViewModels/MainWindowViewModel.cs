@@ -64,6 +64,20 @@ namespace ProjectPlaneCurves.ViewModels
         }
         #endregion
 
+        #region Закрытие окна
+        public ICommand CloseWindowCommand { get; }
+
+        private void OnCloseWindowCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Close();
+        }
+
+        private bool CanCloseWindowCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
         #endregion
 
 
@@ -74,6 +88,7 @@ namespace ProjectPlaneCurves.ViewModels
 
             #region Команды
             GetPlaneCurvesCommand = new LambdaCommand(OnGetPlaneCurvesCommandExecuted, CanGetPlaneCurvesCommandExecute);
+            CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }
 
