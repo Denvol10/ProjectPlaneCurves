@@ -27,7 +27,7 @@ namespace ProjectPlaneCurves.ViewModels
 
         #region Заголовок
 
-        private string _title = "Комнаты";
+        private string _title = "Проецировать линии";
 
         public string Title
         {
