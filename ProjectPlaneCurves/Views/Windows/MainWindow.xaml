@@ -8,7 +8,10 @@
         mc:Ignorable="d"
         Title="{Binding Title}"
         Height="245"
-        Width="350">
+        Width="350"
+        Background="#f0f0f0"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
