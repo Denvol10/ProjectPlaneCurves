@@ -9,9 +9,9 @@ using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
-using RevitWPFTemplate.ViewModels;
+using ProjectPlaneCurves.ViewModels;
 
-namespace RevitWPFTemplate.Infrastructure
+namespace ProjectPlaneCurves.Infrastructure
 {
     [Transaction(TransactionMode.Manual)]
     [Regeneration(RegenerationOption.Manual)]
