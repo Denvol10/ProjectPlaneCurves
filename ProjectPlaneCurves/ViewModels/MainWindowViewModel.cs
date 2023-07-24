@@ -45,6 +45,16 @@ namespace ProjectPlaneCurves.ViewModels
         }
         #endregion
 
+        #region Грань для проецирования
+        private string _faceRepresentation;
+
+        public string FaceRepresentation
+        {
+            get => _faceRepresentation;
+            set => Set(ref _faceRepresentation, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение линий для проецирования
@@ -59,6 +69,23 @@ namespace ProjectPlaneCurves.ViewModels
         }
 
         private bool CanGetPlaneCurvesCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Получение грани
+        public ICommand GetFaceCommand { get; }
+
+        private void OnGetFaceCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            RevitModel.GetFaceBySelection();
+            FaceRepresentation = RevitModel.FaceRepresentation;
+            RevitCommand.mainView.ShowDialog();
+        }
+
+        private bool CanGetFaceCommandExecute(object parameter)
         {
             return true;
         }
@@ -106,6 +133,7 @@ namespace ProjectPlaneCurves.ViewModels
 
             #region Команды
             GetPlaneCurvesCommand = new LambdaCommand(OnGetPlaneCurvesCommandExecuted, CanGetPlaneCurvesCommandExecute);
+            GetFaceCommand = new LambdaCommand(OnGetFaceCommandExecuted, CanGetFaceCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }

@@ -25,6 +25,17 @@ namespace ProjectPlaneCurves.Models
             return modelCurves;
         }
 
+        // Получение грани с помощью пользовательского выбора
+        public static Face GetFaceBySelection(UIApplication uiapp, out string elementIds)
+        {
+            Selection sel = uiapp.ActiveUIDocument.Selection;
+            var selectedFace = sel.PickObject(ObjectType.Face, "Select Face");
+            Face face = uiapp.ActiveUIDocument.Document.GetElement(selectedFace).GetGeometryObjectFromReference(selectedFace) as Face;
+            elementIds = selectedFace.ConvertToStableRepresentation(uiapp.ActiveUIDocument.Document);
+
+            return face;
+        }
+
         // Получение линий на плане из Settings
         public static List<Curve> GetModelCurvesBySettings(Document doc, IEnumerable<int> ids)
         {

@@ -64,6 +64,25 @@ namespace ProjectPlaneCurves
         }
         #endregion
 
+        #region Грань для проецирования линий
+        public Face FaceForProject { get; set; }
+
+        private string _faceRepresentation;
+        public string FaceRepresentation
+        {
+            get => _faceRepresentation;
+            set => _faceRepresentation = value;
+        }
+        #endregion
+
+        #region Получение грани с помощью пользовательского выбора
+        public void GetFaceBySelection()
+        {
+            FaceForProject = RevitGeometryUtils.GetFaceBySelection(Uiapp, out _faceRepresentation);
+        }
+        #endregion
+
+        //TODO Добавить метод для сохранения выбранной грани в Settings
 
     }
 }

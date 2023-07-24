@@ -74,22 +74,24 @@
                 <UniformGrid Rows="2">
                     <TextBlock Text="Линии в плане"
                                Style="{StaticResource TextAboveButton}" />
-                    <Button Style="{StaticResource SelectButton}" 
-                            Command="{Binding GetPlaneCurvesCommand}"/>
+                    <Button Style="{StaticResource SelectButton}"
+                            Command="{Binding GetPlaneCurvesCommand}" />
                 </UniformGrid>
                 <TextBox Text="{Binding PlaneCurvesElemIds}"
                          Style="{StaticResource SelectedItemsBox}" />
             </UniformGrid>
         </GroupBox>
-        <GroupBox Header="Поверхность элементов"
+        <GroupBox Header="Поверхность элемента"
                   Style="{StaticResource BorderGroupStyle}">
             <UniformGrid Columns="2">
                 <UniformGrid Rows="2">
-                    <TextBlock Text="Грани"
+                    <TextBlock Text="Грань"
                                Style="{StaticResource TextAboveButton}" />
-                    <Button Style="{StaticResource SelectButton}" />
+                    <Button Style="{StaticResource SelectButton}"
+                            Command="{Binding GetFaceCommand}" />
                 </UniformGrid>
-                <TextBox Style="{StaticResource SelectedItemsBox}" />
+                <TextBox Style="{StaticResource SelectedItemsBox}"
+                         Text="{Binding FaceRepresentation}" />
             </UniformGrid>
         </GroupBox>
         <GroupBox Header="Проецировать линии"
@@ -100,8 +102,8 @@
                         Margin="0,10" />
                 <Button Style="{StaticResource SelectButton}"
                         Content="Отмена"
-                        Margin="0,10" 
-                        Command="{Binding CloseWindowCommand}"/>
+                        Margin="0,10"
+                        Command="{Binding CloseWindowCommand}" />
             </UniformGrid>
         </GroupBox>
     </StackPanel>
