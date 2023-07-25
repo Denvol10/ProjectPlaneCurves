@@ -82,7 +82,19 @@ namespace ProjectPlaneCurves
         }
         #endregion
 
-        //TODO Добавить метод для сохранения выбранной грани в Settings
+        #region Проверка на то существует ли грань в модели
+        public bool IsFaceExistInModel(string faceRepresentation)
+        {
+            return RevitGeometryUtils.IsFaceExistInModel(Doc, faceRepresentation);
+        }
+        #endregion
 
+        #region Получение грани из Settings
+        public void GetFaceBySetings(string faceRepresentation)
+        {
+            Reference faceRef = Reference.ParseFromStableRepresentation(Doc, faceRepresentation);
+            FaceForProject = Doc.GetElement(faceRef).GetGeometryObjectFromReference(faceRef) as Face;
+        }
+        #endregion
     }
 }

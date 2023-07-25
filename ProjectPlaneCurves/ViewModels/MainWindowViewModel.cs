@@ -111,6 +111,7 @@ namespace ProjectPlaneCurves.ViewModels
         private void SaveSettings()
         {
             Properties.Settings.Default["PlaneCurvesElemIds"] = PlaneCurvesElemIds;
+            Properties.Settings.Default["FaceRepresentation"] = FaceRepresentation;
             Properties.Settings.Default.Save();
         }
 
@@ -127,6 +128,18 @@ namespace ProjectPlaneCurves.ViewModels
                 {
                     PlaneCurvesElemIds = planeCurvesElementIdInSettings;
                     RevitModel.GetPlaneLinesBySettings(planeCurvesElementIdInSettings);
+                }
+            }
+            #endregion
+
+            #region Инициализация значения грани
+            if (!(Properties.Settings.Default["FaceRepresentation"] is null))
+            {
+                string faceRepresentation = Properties.Settings.Default["FaceRepresentation"].ToString();
+                if(RevitModel.IsFaceExistInModel(faceRepresentation) && !string.IsNullOrEmpty(faceRepresentation))
+                {
+                    FaceRepresentation = faceRepresentation;
+                    RevitModel.GetFaceBySetings(faceRepresentation);
                 }
             }
             #endregion

@@ -34,5 +34,17 @@ namespace ProjectPlaneCurves.Properties {
                 this["PlaneCurvesElemIds"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"\"")]
+        public string FaceRepresentation {
+            get {
+                return ((string)(this["FaceRepresentation"]));
+            }
+            set {
+                this["FaceRepresentation"] = value;
+            }
+        }
     }
 }

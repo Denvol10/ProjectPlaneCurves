@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ProjectPlaneCurves.Models
 {
@@ -71,6 +72,34 @@ namespace ProjectPlaneCurves.Models
                 {
                     return false;
                 }
+            }
+
+            return true;
+        }
+
+        // Проверка на то существует грань в модели
+        public static bool IsFaceExistInModel(Document doc, string faceRepresentation)
+        {
+            if (string.IsNullOrEmpty(faceRepresentation))
+            {
+                return false;
+            }
+
+            try
+            {
+                Reference reference = Reference.ParseFromStableRepresentation(doc, faceRepresentation);
+                if (reference is null)
+                {
+                    return false;
+                }
+            }
+            catch (Autodesk.Revit.Exceptions.ArgumentException)
+            {
+                return false;
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
             }
 
             return true;
