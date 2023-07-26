@@ -127,6 +127,12 @@ namespace ProjectPlaneCurves.Models
             return null;
         }
 
+        //TODO Получение точек на ребрах граней
+        //public static List<double> GetParametersOnPolyCurveByEdges(PolyCurve polyCurve, Face face)
+        //{
+        //    var parameters = new List<double>();
+        //}
+
         // Получение id элементов на основе списка в виде строки
         public static List<int> GetIdsByString(string elems)
         {
