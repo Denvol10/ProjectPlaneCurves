@@ -99,7 +99,8 @@
             <UniformGrid Columns="2">
                 <Button Style="{StaticResource SelectButton}"
                         Content="Создать"
-                        Margin="0,10" />
+                        Margin="0,10" 
+                        Command="{Binding CreateReferencePointsOnFaceCommand}"/>
                 <Button Style="{StaticResource SelectButton}"
                         Content="Отмена"
                         Margin="0,10"

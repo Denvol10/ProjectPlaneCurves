@@ -91,6 +91,22 @@ namespace ProjectPlaneCurves.ViewModels
         }
         #endregion
 
+        #region Тест - получение адаптивных точек на грани
+        public ICommand CreateReferencePointsOnFaceCommand { get; }
+
+        private void OnCreateReferencePointsOnFaceCommandExecuted(object parameter)
+        {
+            RevitModel.CreateAdaptivePointsOnFace();
+            SaveSettings();
+            RevitCommand.mainView.Close();
+        }
+
+        private bool CanCreateReferencePointsOnFaceCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
         #region Закрытие окна
         public ICommand CloseWindowCommand { get; }
 
@@ -147,6 +163,8 @@ namespace ProjectPlaneCurves.ViewModels
             #region Команды
             GetPlaneCurvesCommand = new LambdaCommand(OnGetPlaneCurvesCommandExecuted, CanGetPlaneCurvesCommandExecute);
             GetFaceCommand = new LambdaCommand(OnGetFaceCommandExecuted, CanGetFaceCommandExecute);
+            CreateReferencePointsOnFaceCommand = new LambdaCommand(OnCreateReferencePointsOnFaceCommandExecuted,
+                                                                   CanCreateReferencePointsOnFaceCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }

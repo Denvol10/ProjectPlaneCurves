@@ -105,6 +105,28 @@ namespace ProjectPlaneCurves.Models
             return true;
         }
 
+        // Получение точки на грани на основе грани и точки в плане
+        public static XYZ GetPointOnFace(Face face, XYZ planePoint)
+        {
+            Line verticalLine = Line.CreateUnbound(planePoint, XYZ.BasisZ);
+
+            IntersectionResultArray interResult;
+            var compResult = face.Intersect(verticalLine, out interResult);
+
+            if(compResult == SetComparisonResult.Overlap)
+            {
+                foreach(var elem in interResult)
+                {
+                    if(elem is IntersectionResult result)
+                    {
+                        return result.XYZPoint;
+                    }
+                }
+            }
+
+            return null;
+        }
+
         // Получение id элементов на основе списка в виде строки
         public static List<int> GetIdsByString(string elems)
         {

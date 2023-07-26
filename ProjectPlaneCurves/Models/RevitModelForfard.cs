@@ -96,5 +96,63 @@ namespace ProjectPlaneCurves
             FaceForProject = Doc.GetElement(faceRef).GetGeometryObjectFromReference(faceRef) as Face;
         }
         #endregion
+
+        #region Тест получение адаптивных точек на грани
+        public void CreateAdaptivePointsOnFace()
+        {
+            double boundParameter1 = 0;
+            double boundParameter2 = PlaneCurves.GetLength();
+
+            var pointParameters = GenerateParameters(boundParameter1, boundParameter2, 1.5);
+
+            var pointsOnFace = new List<XYZ>();
+
+            foreach(var parameter in pointParameters)
+            {
+                XYZ planePoint = PlaneCurves.GetPointOnPolycurve(parameter, out _);
+                var pointOnFace = RevitGeometryUtils.GetPointOnFace(FaceForProject, planePoint);
+                if(!(pointOnFace is null))
+                {
+                    pointsOnFace.Add(pointOnFace);
+                }
+            }
+
+            using(Transaction trans = new Transaction(Doc, "Created Reference Points"))
+            {
+                trans.Start();
+                foreach(var point in pointsOnFace)
+                {
+                    var refPoint = Doc.FamilyCreate.NewReferencePoint(point);
+                }
+                trans.Commit();
+            }
+        }
+        #endregion
+
+        #region Генератор параметров на поликривой
+        private List<double> GenerateParameters(double bound1, double bound2, double inputStep)
+        {
+            var parameters = new List<double>
+            { bound1 };
+
+            double approxStep = UnitUtils.ConvertToInternalUnits(inputStep, UnitTypeId.Meters);
+
+            int count = (int)(Math.Abs(bound2 - bound1) / approxStep + 1);
+
+            double start = bound1;
+
+            double step = (bound2 - bound1) / (count - 1);
+            for (int i = 0; i < count - 2; i++)
+            {
+                parameters.Add(start + step);
+                start += step;
+            }
+
+            parameters.Add(bound2);
+
+            return parameters;
+        }
+        #endregion
     }
 }
+
