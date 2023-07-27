@@ -97,6 +97,7 @@ namespace ProjectPlaneCurves
         }
         #endregion
 
+        //TODO Добавить создание DirectShape линий по точкам
         #region Тест получение адаптивных точек на грани
         public void CreateAdaptivePointsOnFace()
         {
