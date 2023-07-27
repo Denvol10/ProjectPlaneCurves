@@ -104,6 +104,10 @@ namespace ProjectPlaneCurves
             double boundParameter2 = PlaneCurves.GetLength();
 
             var pointParameters = GenerateParameters(boundParameter1, boundParameter2, 1.5);
+            var edgeParameters = RevitGeometryUtils.GetParametersOnPolyCurveByEdges(PlaneCurves, FaceForProject);
+
+            pointParameters.AddRange(edgeParameters);
+            pointParameters = pointParameters.OrderBy(p => p).ToList();
 
             var pointsOnFace = new List<XYZ>();
 

@@ -127,11 +127,33 @@ namespace ProjectPlaneCurves.Models
             return null;
         }
 
-        //TODO Получение точек на ребрах граней
-        //public static List<double> GetParametersOnPolyCurveByEdges(PolyCurve polyCurve, Face face)
-        //{
-        //    var parameters = new List<double>();
-        //}
+        // Получение точек на ребрах граней (только для ребер в виде прямой линии)
+        public static List<double> GetParametersOnPolyCurveByEdges(PolyCurve polyCurve, Face face)
+        {
+            var parameters = new List<double>();
+            var edgeArrays = face.EdgeLoops;
+            foreach(EdgeArray edgeArray in edgeArrays)
+            {
+                foreach(Edge edge in edgeArray)
+                {
+                    if(edge.AsCurve() is Line line)
+                    {
+                        XYZ startPoint = line.GetEndPoint(0);
+                        XYZ endPoint = line.GetEndPoint(1);
+                        XYZ startPlanePoint = new XYZ(startPoint.X, startPoint.Y, 0);
+                        XYZ endPlanePoint = new XYZ(endPoint.X, endPoint.Y, 0);
+                        Line planeLine = Line.CreateBound(startPlanePoint, endPlanePoint);
+                        double parameter;
+                        if(polyCurve.Intersect(planeLine, out _, out parameter))
+                        {
+                            parameters.Add(parameter);
+                        }    
+                    }
+                }
+            }
+
+            return parameters;
+        }
 
         // Получение id элементов на основе списка в виде строки
         public static List<int> GetIdsByString(string elems)
