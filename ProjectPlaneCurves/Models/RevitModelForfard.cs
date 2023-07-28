@@ -99,12 +99,12 @@ namespace ProjectPlaneCurves
 
         //TODO Добавить создание DirectShape линий по точкам
         #region Тест получение адаптивных точек на грани
-        public void CreateAdaptivePointsOnFace()
+        public void CreateAdaptivePointsOnFace(double pointStep)
         {
             double boundParameter1 = 0;
             double boundParameter2 = PlaneCurves.GetLength();
 
-            var pointParameters = GenerateParameters(boundParameter1, boundParameter2, 1.5);
+            var pointParameters = GenerateParameters(boundParameter1, boundParameter2, pointStep);
             var edgeParameters = RevitGeometryUtils.GetParametersOnPolyCurveByEdges(PlaneCurves, FaceForProject);
 
             pointParameters.AddRange(edgeParameters);

@@ -55,6 +55,16 @@ namespace ProjectPlaneCurves.ViewModels
         }
         #endregion
 
+        #region Шаг вершин проецированной полилинии
+        private double _pointStep = (double)Properties.Settings.Default["PointStep"];
+
+        public double PointStep
+        {
+            get => _pointStep;
+            set => Set(ref _pointStep, value);
+        }
+        #endregion
+
         #region Команды
 
         #region Получение линий для проецирования
@@ -96,7 +106,7 @@ namespace ProjectPlaneCurves.ViewModels
 
         private void OnCreateReferencePointsOnFaceCommandExecuted(object parameter)
         {
-            RevitModel.CreateAdaptivePointsOnFace();
+            RevitModel.CreateAdaptivePointsOnFace(PointStep);
             SaveSettings();
             RevitCommand.mainView.Close();
         }
@@ -128,6 +138,7 @@ namespace ProjectPlaneCurves.ViewModels
         {
             Properties.Settings.Default["PlaneCurvesElemIds"] = PlaneCurvesElemIds;
             Properties.Settings.Default["FaceRepresentation"] = FaceRepresentation;
+            Properties.Settings.Default["PointStep"] = PointStep;
             Properties.Settings.Default.Save();
         }
 

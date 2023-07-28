@@ -46,5 +46,17 @@ namespace ProjectPlaneCurves.Properties {
                 this["FaceRepresentation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.5")]
+        public double PointStep {
+            get {
+                return ((double)(this["PointStep"]));
+            }
+            set {
+                this["PointStep"] = value;
+            }
+        }
     }
 }
