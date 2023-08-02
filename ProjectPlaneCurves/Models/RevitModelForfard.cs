@@ -11,6 +11,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using ProjectPlaneCurves.Models;
+using System.IO;
 
 namespace ProjectPlaneCurves
 {
@@ -97,9 +98,8 @@ namespace ProjectPlaneCurves
         }
         #endregion
 
-        //TODO Добавить создание DirectShape линий по точкам
-        #region Тест получение адаптивных точек на грани
-        public void CreateAdaptivePointsOnFace(double pointStep)
+        #region Построение полилинии на грани
+        public void CreatePolyLineOnFace(double pointStep)
         {
             double boundParameter1 = 0;
             double boundParameter2 = PlaneCurves.GetLength();
@@ -112,22 +112,33 @@ namespace ProjectPlaneCurves
 
             var pointsOnFace = new List<XYZ>();
 
-            foreach(var parameter in pointParameters)
+            string testPath = @"O:\Revit Infrastructure Tools\ProjectPlaneCurves\ProjectPlaneCurves\TestResult.txt";
+
+            using (StreamWriter sw = new StreamWriter(testPath, false, Encoding.Default))
             {
-                XYZ planePoint = PlaneCurves.GetPointOnPolycurve(parameter, out _);
-                var pointOnFace = RevitGeometryUtils.GetPointOnFace(FaceForProject, planePoint);
-                if(!(pointOnFace is null))
+                foreach (var parameter in pointParameters)
                 {
-                    pointsOnFace.Add(pointOnFace);
+                    XYZ planePoint = PlaneCurves.GetPointOnPolycurve(parameter, out _);
+                    var pointOnFace = RevitGeometryUtils.GetPointOnFace(FaceForProject, planePoint);
+                    if (!(pointOnFace is null))
+                    {
+                        sw.WriteLine(pointsOnFace);
+                        pointsOnFace.Add(pointOnFace);
+                    }
                 }
             }
 
-            using(Transaction trans = new Transaction(Doc, "Created Reference Points"))
+
+            using (Transaction trans = new Transaction(Doc, "Polyline Created"))
             {
                 trans.Start();
-                foreach(var point in pointsOnFace)
+                PolyLine polyLine = PolyLine.Create(pointsOnFace);
+                var lineList = new List<GeometryObject> { polyLine };
+                ElementId categoryId = new ElementId(BuiltInCategory.OST_Lines);
+                DirectShape directShape = DirectShape.CreateElement(Doc, categoryId);
+                if (directShape.IsValidShape(lineList))
                 {
-                    var refPoint = Doc.FamilyCreate.NewReferencePoint(point);
+                    directShape.SetShape(lineList);
                 }
                 trans.Commit();
             }

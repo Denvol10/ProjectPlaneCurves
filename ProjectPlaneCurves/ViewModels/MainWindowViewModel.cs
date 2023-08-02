@@ -101,17 +101,17 @@ namespace ProjectPlaneCurves.ViewModels
         }
         #endregion
 
-        #region Тест - получение адаптивных точек на грани
-        public ICommand CreateReferencePointsOnFaceCommand { get; }
+        #region Построение полилинии на грани
+        public ICommand CreatePolyLineOnFaceCommand { get; }
 
-        private void OnCreateReferencePointsOnFaceCommandExecuted(object parameter)
+        private void OnCreatePolyLineOnFaceCommandExecuted(object parameter)
         {
-            RevitModel.CreateAdaptivePointsOnFace(PointStep);
+            RevitModel.CreatePolyLineOnFace(PointStep);
             SaveSettings();
             RevitCommand.mainView.Close();
         }
 
-        private bool CanCreateReferencePointsOnFaceCommandExecute(object parameter)
+        private bool CanCreatePolyLineOnFaceCommandExecute(object parameter)
         {
             return true;
         }
@@ -174,8 +174,8 @@ namespace ProjectPlaneCurves.ViewModels
             #region Команды
             GetPlaneCurvesCommand = new LambdaCommand(OnGetPlaneCurvesCommandExecuted, CanGetPlaneCurvesCommandExecute);
             GetFaceCommand = new LambdaCommand(OnGetFaceCommandExecuted, CanGetFaceCommandExecute);
-            CreateReferencePointsOnFaceCommand = new LambdaCommand(OnCreateReferencePointsOnFaceCommandExecuted,
-                                                                   CanCreateReferencePointsOnFaceCommandExecute);
+            CreatePolyLineOnFaceCommand = new LambdaCommand(OnCreatePolyLineOnFaceCommandExecuted,
+                                                                   CanCreatePolyLineOnFaceCommandExecute);
             CloseWindowCommand = new LambdaCommand(OnCloseWindowCommandExecuted, CanCloseWindowCommandExecute);
             #endregion
         }
