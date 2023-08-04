@@ -94,7 +94,15 @@ namespace ProjectPlaneCurves
         public void GetFaceBySetings(string faceRepresentation)
         {
             Reference faceRef = Reference.ParseFromStableRepresentation(Doc, faceRepresentation);
-            FaceForProject = Doc.GetElement(faceRef).GetGeometryObjectFromReference(faceRef) as Face;
+
+            if (Doc.IsFamilyDocument)
+            {
+                FaceForProject = Doc.GetElement(faceRef).GetGeometryObjectFromReference(faceRef) as Face;
+            }
+            else
+            {
+                FaceForProject = RevitGeometryUtils.GetFaceByReference(Doc, faceRef);
+            }
         }
         #endregion
 
