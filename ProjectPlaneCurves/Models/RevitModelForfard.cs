@@ -115,27 +115,27 @@ namespace ProjectPlaneCurves
             var pointParameters = GenerateParameters(boundParameter1, boundParameter2, pointStep);
             var edgeParameters = RevitGeometryUtils.GetParametersOnPolyCurveByEdges(PlaneCurves, FaceForProject);
 
-            pointParameters.AddRange(edgeParameters);
+            foreach(var parameter in edgeParameters)
+            {
+                if(!pointParameters.Contains(parameter))
+                {
+                    pointParameters.Add(parameter);
+                }
+            }
             pointParameters = pointParameters.OrderBy(p => p).ToList();
 
             var pointsOnFace = new List<XYZ>();
 
-            string testPath = @"O:\Revit Infrastructure Tools\ProjectPlaneCurves\ProjectPlaneCurves\TestResult.txt";
-
-            // TODO Почему то не удается получить точки на поверхности в файле проекта, хотя в файле семейства все работает
-            using (StreamWriter sw = new StreamWriter(testPath, false, Encoding.Default))
+            foreach (var parameter in pointParameters)
             {
-                sw.WriteLine(FaceForProject.GetHashCode());
-                foreach (var parameter in pointParameters)
+                XYZ planePoint = PlaneCurves.GetPointOnPolycurve(parameter, out _);
+                if (planePoint is null)
+                    continue;
+
+                var pointOnFace = RevitGeometryUtils.GetPointOnFace(FaceForProject, planePoint);
+                if (!(pointOnFace is null))
                 {
-                    XYZ planePoint = PlaneCurves.GetPointOnPolycurve(parameter, out _);
-                    sw.WriteLine($"{planePoint.X} | {planePoint.Y} | {planePoint.Z}\n");
-                    var pointOnFace = RevitGeometryUtils.GetPointOnFace(FaceForProject, planePoint);
-                    if (!(pointOnFace is null))
-                    {
-                        sw.WriteLine(pointsOnFace);
-                        pointsOnFace.Add(pointOnFace);
-                    }
+                    pointsOnFace.Add(pointOnFace);
                 }
             }
 
