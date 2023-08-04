@@ -29,12 +29,46 @@ namespace ProjectPlaneCurves.Models
         // Получение грани с помощью пользовательского выбора
         public static Face GetFaceBySelection(UIApplication uiapp, out string elementIds)
         {
+            Document doc = uiapp.ActiveUIDocument.Document;
             Selection sel = uiapp.ActiveUIDocument.Selection;
-            var selectedFace = sel.PickObject(ObjectType.Face, "Select Face");
-            Face face = uiapp.ActiveUIDocument.Document.GetElement(selectedFace).GetGeometryObjectFromReference(selectedFace) as Face;
-            elementIds = selectedFace.ConvertToStableRepresentation(uiapp.ActiveUIDocument.Document);
 
-            return face;
+
+
+            var selectedFace = sel.PickObject(ObjectType.Face, "Select Face");
+            string faceSymbolReference = selectedFace.ConvertToStableRepresentation(doc);
+            elementIds = faceSymbolReference;
+
+            if(doc.IsFamilyDocument)
+            {
+                Face face = doc.GetElement(selectedFace).GetGeometryObjectFromReference(selectedFace) as Face;
+                elementIds = selectedFace.ConvertToStableRepresentation(doc);
+
+                return face;
+            }
+
+            string[] elementInfo = faceSymbolReference.Split(':');
+            int faceId = int.Parse(elementInfo.ElementAt(elementInfo.Length - 2));
+
+            Element element = doc.GetElement(selectedFace.ElementId);
+            Options options = new Options();
+            var elementGeometry = element.get_Geometry(options);
+            var elementGeometryInstance = elementGeometry.OfType<GeometryInstance>().First();
+            var faceArrays = elementGeometryInstance.GetInstanceGeometry().OfType<Solid>().Select(s => s.Faces);
+            foreach(var faceArray in faceArrays)
+            {
+                foreach(var faceObject in faceArray)
+                {
+                    if(faceObject is Face face)
+                    {
+                        if (face.Id == faceId)
+                        {
+                            return face;
+                        }
+                    }
+                }
+            }
+
+            return null;
         }
 
         // Получение линий на плане из Settings
